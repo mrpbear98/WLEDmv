@@ -1,6 +1,7 @@
 name: WLED compile
 
 on:
+    push:
     workflow_dispatch:
 # Custom build for mrpbear98
 jobs:
