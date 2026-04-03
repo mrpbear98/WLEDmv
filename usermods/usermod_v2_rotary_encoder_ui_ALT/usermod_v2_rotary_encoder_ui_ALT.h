@@ -12,8 +12,8 @@
 // 
 // * Brightness
 // * CCT (warm/cool white balance)
-// * Hue (main color)
 // * Preset cycling (requires Preset Low and Preset High to be set)
+// * Hue (main color)
 //
 // Change between modes by pressing the button once.
 // Double press toggles power on/off.
@@ -602,8 +602,8 @@ void RotaryEncoderUIUsermod::loop()
             if (!(strip.getSegment(applyToAll ? strip.getFirstSelectedSegId() : strip.getMainSegmentId()).getLightCapabilities() & 0x04)) newState++;
             else { strcpy_P(lineBuffer, PSTR("CCT")); changedState = true; }
             break;
-          case  2: strcpy_P(lineBuffer, PSTR("Main Color")); changedState = true; break;
-          case  3: if (presetHigh==0 || presetLow == 0) newState++; else { strcpy_P(lineBuffer, PSTR("Preset")); changedState = true; } break;
+          case  2: if (presetHigh==0 || presetLow == 0) newState++; else { strcpy_P(lineBuffer, PSTR("Preset")); changedState = true; } break;
+          case  3: strcpy_P(lineBuffer, PSTR("Main Color")); changedState = true; break;
         }
         if (newState > LAST_UI_STATE) newState = 0;
       } while (!changedState);
@@ -611,12 +611,12 @@ void RotaryEncoderUIUsermod::loop()
         switch (newState) {
           case  0: changedState = changeState(lineBuffer,   1,   0,  1); break; //1  = sun
           case  1: changedState = changeState(lineBuffer, 255, 255, 10); break; //10 = star
-          case  2: changedState = changeState(lineBuffer, 255, 255,  7); break; //7  = brush
-          case  3: changedState = changeState(lineBuffer, 255, 255, 11); break; //11 = heart
+          case  2: changedState = changeState(lineBuffer, 255, 255, 11); break; //11 = heart
+          case  3: changedState = changeState(lineBuffer, 255, 255,  7); break; //7  = brush
         }
       }
       if (changedState) {
-        if (select_state == 3 && newState != 3) {
+        if (select_state == 2 && newState != 2) {
           unloadPlaylist();
         }
         select_state = newState;
@@ -632,8 +632,8 @@ void RotaryEncoderUIUsermod::loop()
         switch(select_state) {
           case  0: changeBrightness(true); break;
           case  1: changeCCT(true);        break;
-          case  2: changeHue(true);        break;
-          case  3: changePreset(true);     break;
+          case  2: changePreset(true);     break;
+          case  3: changeHue(true);        break;
         }
       }
       else if (Enc_B == HIGH)
@@ -641,8 +641,8 @@ void RotaryEncoderUIUsermod::loop()
         switch(select_state) {
           case  0: changeBrightness(false); break;
           case  1: changeCCT(false);        break;
-          case  2: changeHue(false);        break;
-          case  3: changePreset(false);     break;
+          case  2: changePreset(false);     break;
+          case  3: changeHue(false);        break;
         }
       }
     }
@@ -950,7 +950,13 @@ void RotaryEncoderUIUsermod::changePreset(bool increase) {
   }
   display->updateRedrawTime();
 #endif
-if (presetHigh && presetLow && presetHigh > presetLow) {
+  if (presetHigh && presetLow && presetHigh > presetLow) {
+    StaticJsonDocument<64> root;
+    char str[64];
+    sprintf_P(str, PSTR("%d~%d~%s"), presetLow, presetHigh, increase?"":"-");
+    root["ps"] = str;
+    deserializeState(root.as<JsonObject>(), CALL_MODE_BUTTON_PRESET);
+/*
     String apireq = F("win&PL=~");
     if (!increase) apireq += '-';
     apireq += F("&P1=");
@@ -958,9 +964,9 @@ if (presetHigh && presetLow && presetHigh > presetLow) {
     apireq += F("&P2=");
     apireq += presetHigh;
     handleSet(nullptr, apireq, false);
-lampUdated();
+*/
+    lampUdated();
   #ifdef USERMOD_FOUR_LINE_DISPLAY
-    char str[64];
     sprintf(str, "%d", currentPreset);
     display->overlay(str, 500, 11); // use heart
   #endif
