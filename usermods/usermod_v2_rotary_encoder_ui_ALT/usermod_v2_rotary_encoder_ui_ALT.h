@@ -591,7 +591,7 @@ void RotaryEncoderUIUsermod::loop()
     }
     if (buttonWaitTime && currentTime-buttonWaitTime>350 && !buttonPressedBefore) { //same speed as in button.cpp
       buttonWaitTime = 0;
-      uint8_t State = select_state + 1;
+      uint8_t newState = select_state + 1;
       bool changedState = false;
       char lineBuffer[64];
       do {
