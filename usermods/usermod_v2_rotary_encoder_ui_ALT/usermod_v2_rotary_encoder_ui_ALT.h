@@ -958,8 +958,9 @@ if (presetHigh && presetLow && presetHigh > presetLow) {
     apireq += F("&P2=");
     apireq += presetHigh;
     handleSet(nullptr, apireq, false);
-    lampUdated();
+lampUdated();
   #ifdef USERMOD_FOUR_LINE_DISPLAY
+    char str[64];
     sprintf(str, "%d", currentPreset);
     display->overlay(str, 500, 11); // use heart
   #endif
