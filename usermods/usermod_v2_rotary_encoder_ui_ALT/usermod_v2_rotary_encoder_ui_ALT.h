@@ -950,13 +950,7 @@ void RotaryEncoderUIUsermod::changePreset(bool increase) {
   }
   display->updateRedrawTime();
 #endif
-  if (presetHigh && presetLow && presetHigh > presetLow) {
-    StaticJsonDocument<64> root;
-    char str[64];
-    sprintf_P(str, PSTR("%d~%d~%s"), presetLow, presetHigh, increase?"":"-");
-    root["ps"] = str;
-    deserializeState(root.as<JsonObject>(), CALL_MODE_BUTTON_PRESET);
-/*
+if (presetHigh && presetLow && presetHigh > presetLow) {
     String apireq = F("win&PL=~");
     if (!increase) apireq += '-';
     apireq += F("&P1=");
@@ -964,7 +958,6 @@ void RotaryEncoderUIUsermod::changePreset(bool increase) {
     apireq += F("&P2=");
     apireq += presetHigh;
     handleSet(nullptr, apireq, false);
-*/
     lampUdated();
   #ifdef USERMOD_FOUR_LINE_DISPLAY
     sprintf(str, "%d", currentPreset);
