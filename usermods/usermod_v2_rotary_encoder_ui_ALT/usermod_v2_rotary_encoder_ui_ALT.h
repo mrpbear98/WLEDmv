@@ -66,7 +66,7 @@
 
 // The last UI state, remove color and saturation option if display not active (too many options)
 #ifdef USERMOD_FOUR_LINE_DISPLAY
- #define LAST_UI_STATE 11
+ #define LAST_UI_STATE 3
 #else
  #define LAST_UI_STATE 3
 #endif
