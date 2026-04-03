@@ -615,7 +615,12 @@ void RotaryEncoderUIUsermod::loop()
           case  3: changedState = changeState(lineBuffer, 255, 255, 11); break; //11 = heart
         }
       }
-      if (changedState) select_state = newState;
+      if (changedState) {
+        if (select_state == 3 && newState != 3) {
+          currentPlaylist = -1;
+        }
+        select_state = newState;
+      }
     }
 
     Enc_A = readPin(pinA); // Read encoder pins
