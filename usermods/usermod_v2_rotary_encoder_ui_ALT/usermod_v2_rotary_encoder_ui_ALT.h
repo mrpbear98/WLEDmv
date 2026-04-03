@@ -441,7 +441,7 @@ const char **RotaryEncoderUIUsermod::re_findModeStrings(const char json[], int n
       case '"':
         insideQuotes = !insideQuotes;
         if (insideQuotes) {
-          // We have a new mode or palette
+          // We have a  mode or palette
           modeStrings[modeIndex] = (char *)(json + i + 1);
         }
         break;
@@ -591,7 +591,7 @@ void RotaryEncoderUIUsermod::loop()
     }
     if (buttonWaitTime && currentTime-buttonWaitTime>350 && !buttonPressedBefore) { //same speed as in button.cpp
       buttonWaitTime = 0;
-      char newState = select_state + 1;
+      uint8_t State = select_state + 1;
       bool changedState = false;
       char lineBuffer[64];
       do {
