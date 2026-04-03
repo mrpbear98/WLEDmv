@@ -617,7 +617,7 @@ void RotaryEncoderUIUsermod::loop()
       }
       if (changedState) {
         if (select_state == 3 && newState != 3) {
-          currentPlaylist = -1;
+          unloadPlaylist();
         }
         select_state = newState;
       }
